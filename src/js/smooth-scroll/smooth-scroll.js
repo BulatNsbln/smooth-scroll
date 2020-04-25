@@ -1,3 +1,7 @@
+import './_closest.polyfill';
+import './_customEvent.polyfill';
+import './_requestAnimationFrame.polyfill';
+
 (function (root, factory) {
   if (typeof (define === 'function') && define.amd) {
     define([], function () {
@@ -36,7 +40,6 @@
       emitEvents: true
 
     };
-    _smoothScroll = {};
     _settings;
     _anchor;
     _toggle;
@@ -57,8 +60,8 @@
       this.destroy();
 
       // Selectors and variables
-      this.settings = this._extend(this._defaults, options || {});
-      this.fixedHeader = this._settings.header ? document.querySelector(this._settings.header) : null;
+      this._settings = this._extend(this._defaults, options || {});
+      this._fixedHeader = this._settings.header ? document.querySelector(this._settings.header) : null;
 
       // When a toggle is clicked, run the click handler
       document.addEventListener('click', this._clickHandler, false);
@@ -77,9 +80,9 @@
       const _settings = this._extend(this._settings || this._defaults, this._options || {}); // Merge user options with defaults
 
       // Selectors and variables
-      const isNum = (Object.prototype.toString.call(this.anchor) === '[object Number]');
+      const isNum = (Object.prototype.toString.call(this._anchor) === '[object Number]');
 
-      const anchorElem = isNum || (!this.anchor.tagName ? null : this.anchor);
+      const anchorElem = isNum || (!this._anchor.tagName ? null : this._anchor);
 
       if (!isNum && !anchorElem) return;
 
@@ -475,7 +478,7 @@
       if (!('closest' in event.target)) return;
 
       // Check if a smooth scroll link was clicked
-      const toggle = event.target.closest(selector);
+      const toggle = event.target.closest(this._selector);
       if (!toggle || (toggle.tagName.toLowerCase() !== 'a') || event.target.closest(this._settings.ignore)) return;
 
       // Only run if link is an anchor and points to the current page
@@ -514,7 +517,7 @@
       if (history.state === null) return;
 
       // Only run if state is a popstate record for this instantiation
-      if (!history.state.smoothScroll || history.state.smoothScroll !== JSON.stringify(this.settings)) return;
+      if (!history.state.smoothScroll || history.state.smoothScroll !== JSON.stringify(this._settings)) return;
 
       // Only run if state includes an anchor
 
