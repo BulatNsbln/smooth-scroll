@@ -130,7 +130,6 @@ var jsTasks = lazypipe()
 
 // Lint, minify, and concatenate scripts
 var buildScripts = function (done) {
-
 	// Make sure this feature is activated before running
 	if (!settings.scripts) return done();
 
@@ -174,7 +173,6 @@ var buildScripts = function (done) {
 
 	// Signal completion
 	done();
-
 };
 
 // Lint scripts
